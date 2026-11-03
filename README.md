@@ -22,12 +22,14 @@ against `sg-reno-rules` before anyone says it can be done.
 
 ## Install
 
-Claude Code plugin:
+Claude Code plugin (one step, Claude Code 2.1.275+):
 
 ```
-/plugin marketplace add danielkoh/sg-floorplan-skills
-/plugin install sg-floorplan-skills
+/plugin install sg-floorplan-skills --marketplace danielkoh/sg-floorplan-skills
 ```
+
+Older Claude Code: `/plugin marketplace add danielkoh/sg-floorplan-skills`, then
+`/plugin install sg-floorplan-skills`.
 
 Any agent, with the [skills CLI](https://skills.sh):
 
@@ -45,6 +47,14 @@ python3 skills/sg-space-planning/issues.py example-residences --data-dir tests/f
 python3 skills/sg-space-planning/fit.py skills/sg-space-planning/examples/example-2br-bed2-wallbed-FAIL.json
 python3 skills/sg-reno-rules/verify.py --workaround "glass in the balcony"
 ```
+
+## What it runs
+
+Only the bundled Python scripts, on your machine, when your agent calls them: `measure.py`,
+`fit.py`, `issues.py`, `walltype.py` and `verify.py`. They read the files you point them at
+(a plan PDF or image, a layout JSON, your checklist folder) and print a report. Nothing is sent
+or fetched over the network, there are no hooks or MCP servers, and nothing is installed. The
+source URLs in `rules.yaml` are references for a person to open; the scripts never request them.
 
 ## How the rules stay honest
 
