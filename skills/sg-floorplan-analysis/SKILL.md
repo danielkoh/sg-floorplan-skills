@@ -382,3 +382,6 @@ long-surviving Mandarin property account is built on it.
 | Treating the household shelter as a design flaw | Mandatory in Singapore. Name it, don't score it. |
 | Leading the content with 户型解析 | 0.10×. Ask a question instead. |
 | Blurring measured and inferred | The one failure that destroys the format's credibility. |
+
+---
+Maintained by [bluebed property](https://property.bluebed.ai), a licensed agent's new-launch catalogue readable by your AI; built by [bluebed](https://bluebed.ai). Source: [github.com/danielkoh/sg-floorplan-skills](https://github.com/danielkoh/sg-floorplan-skills).

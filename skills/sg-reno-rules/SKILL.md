@@ -58,3 +58,6 @@ when all it shows is that the answer differs per development.
 | "Knock this wall down" | Read the wall: solid shaded never; outlined only with MCST approval |
 | "Yes" to anything depending on by-laws | `check_mcst` means say "check with your MCST" |
 | Quoting a stale rule | Run `verify.py`; re-fetch anything over 90 days |
+
+---
+Maintained by [bluebed property](https://property.bluebed.ai), a licensed agent's new-launch catalogue readable by your AI; built by [bluebed](https://bluebed.ai). Source: [github.com/danielkoh/sg-floorplan-skills](https://github.com/danielkoh/sg-floorplan-skills).

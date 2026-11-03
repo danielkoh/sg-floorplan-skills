@@ -116,3 +116,6 @@ Examples: `examples/example-3br-bed3-study-for-two.json` (PASS, read off a real 
 | Script opens "No yard, no store room…" | Open on the household's situation |
 | A walkway failed the check, so it was removed | Declare it in `routes`; move furniture until it passes |
 | Desk chair and bed walkway share floor, unmentioned | Restate each `SHARED` line in the output |
+
+---
+Maintained by [bluebed property](https://property.bluebed.ai), a licensed agent's new-launch catalogue readable by your AI; built by [bluebed](https://bluebed.ai). Source: [github.com/danielkoh/sg-floorplan-skills](https://github.com/danielkoh/sg-floorplan-skills).
