@@ -9,6 +9,25 @@ rule quoted from its source.
 > quoted rules. Renovation rules differ per development: always confirm with your MCST, the
 > developer's documents and the relevant authority before you buy, drill or hack anything.
 
+## Early, open source, and not perfect
+
+This is version 0.2, built for our own work on Singapore new-launch condos and opened up so
+others can use it, check it and make it better. Please treat it that way:
+
+- **It will be wrong sometimes.** The floor-plan reading is only as good as the drawing and the
+  checklist it is given, and `walltype.py` reads pixels, so an unusual drawing style can fool it.
+  Check anything that matters against the plan itself.
+- **Coverage is narrow.** Condos and ECs only; HDB flats are not covered yet. The renovation
+  rules are a dozen of the common questions, not the whole rulebook, and every development's
+  own by-laws can be stricter.
+- **Some numbers are guidance.** Bed sizes are well sourced; most clearances come from retailer
+  and industry guides, graded as such in `standards.yaml`. Who a layout "suits" is judgement.
+- **Rules go stale.** Each one is dated, and they need re-checking every 90 days.
+- **No support promise.** We fix what we run into. Issues are read; replies may take a while.
+
+If you find a mistake, a missing rule or a plan it misreads, a pull request is the best way to
+fix it, and an issue is the next best.
+
 ## Skills
 
 | Skill | What it does |
@@ -65,13 +84,20 @@ source URLs in `rules.yaml` are references for a person to open; the scripts nev
 
 ## Contributing
 
-Pull requests welcome, especially rules. A new or changed rule needs the verbatim quote, the
-primary-source URL (SCDF, URA, BCA, EMA, Singapore Statutes Online), the page's own updated date
-and the date you fetched it. Run `python3 -m pytest -q` before opening the PR.
+This is open source under the MIT licence, and pull requests are welcome, from a typo to a new
+skill. Useful places to start:
+
+- a renovation rule you can quote from its official source, or a fresher quote for an existing one
+- HDB coverage (a separate rules section with its own sources)
+- better-sourced clearances in `standards.yaml`
+- a floor plan from a developer whose drawing style `walltype.py` or `measure.py` gets wrong
+- new layout traits, or clearer wording for who a layout suits
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the few rules that keep it honest.
 
 ## About
 
-Built and used daily by **[bluebed property](https://property.bluebed.ai)** — a licensed agent's
+Built for and used by **[bluebed property](https://property.bluebed.ai)** — a licensed agent's
 new-launch catalogue, readable by your AI. Floor plans, measured MRT and school distances, and the
 rules behind every figure. The engineering behind it is by **[bluebed](https://bluebed.ai)**.
 
