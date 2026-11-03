@@ -1,0 +1,14 @@
+{"_meta": {"project": "Example Residences"},
+ "rows": [
+  {"type": "2A", "category": "2-Bedroom", "strata_sqft": 732, "bed_bath": "2 bed / 2 bath",
+   "room_dims": "master 2.6x3.7; bed2 2.6x3.2", "kitchen_window": "none (internal kitchen)",
+   "bathrooms_without_window": "Master Bath; Bath 2", "household_shelter": "none drawn in the unit", "yard": "none",
+   "study": "study niche about 0.7 x 1.6 m, open, no window"},
+  {"type": "3B", "category": "3-Bedroom", "strata_sqft": 872, "bed_bath": "3 bed / 2 bath",
+   "room_dims": "master 2.9x3.85 (0.7 m wardrobe); bedroom2 2.45x3.25 (0.7 m wardrobe); bedroom3 2.3x3.25 (0.7 m wardrobe)",
+   "kitchen_window": "own window, onto an A/C ledge", "bathrooms_without_window": "none",
+   "household_shelter": "yes, 1.2 x 2.4 m", "yard": "none"},
+  {"type": "2C", "category": "2-Bedroom", "strata_sqft": 592, "bed_bath": "2 bed / 1 bath",
+   "room_dims": "master 2.3x3.0; bedroom2 2.3x2.6",
+   "minuses": "No foyer: the front door opens into the kitchen floor | Kitchen has no window and cannot be closed off"}
+ ]}

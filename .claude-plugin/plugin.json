@@ -1,0 +1,10 @@
+{
+  "name": "sg-floorplan-skills",
+  "version": "0.1.0",
+  "description": "Read Singapore condo floor plans like a careful agent: measure, find buyer-deterring layout issues, prove furniture layouts fit, and quote the renovation rules. Not legal or renovation advice.",
+  "author": { "name": "bluebed", "url": "https://property.bluebed.ai" },
+  "license": "MIT",
+  "homepage": "https://property.bluebed.ai",
+  "repository": "https://github.com/danielkoh/sg-floorplan-skills",
+  "keywords": ["singapore", "floor-plan", "condo", "space-planning", "interior-design", "renovation", "property", "claude-skills"]
+}

@@ -1,0 +1,47 @@
+{
+ "title": "3-bedroom, bedroom 2 (2.45 m wide): queen with hinged wardrobe doors — expected FAIL, a finding kept as evidence",
+ "room": {
+  "w": 2.45,
+  "d": 3.1
+ },
+ "door_entry": {
+  "x": 0.0,
+  "y": 0.0,
+  "w": 0.85,
+  "d": 0.8
+ },
+ "fixed": [
+  {
+   "name": "door swing",
+   "kind": "door_swing",
+   "x": 0.0,
+   "y": 0.0,
+   "w": 0.85,
+   "d": 0.85
+  }
+ ],
+ "items": [
+  {
+   "name": "built-in wardrobe",
+   "x": 1.05,
+   "y": 0.0,
+   "w": 1.4,
+   "d": 0.7,
+   "use": {
+    "side": "+y",
+    "depth": 0.9
+   }
+  },
+  {
+   "name": "queen bed 1.62x1.95 incl. frame",
+   "x": 0.5,
+   "y": 1.48,
+   "w": 1.95,
+   "d": 1.62,
+   "use": {
+    "side": "-y",
+    "depth": 0.6
+   }
+  }
+ ]
+}

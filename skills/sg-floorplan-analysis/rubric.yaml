@@ -1,0 +1,434 @@
+# Singapore floorplan rubric — versioned so every analysis is comparable.
+# Edit this file, not the prose in SKILL.md, when the criteria change.
+version: 1
+updated: 2026-11-03
+
+# ---------------------------------------------------------------------------
+# Area accounting. Compute these before forming any opinion — several later
+# checks depend on them, and a plan that omits the numbers changes the verdict.
+# ---------------------------------------------------------------------------
+area:
+  - id: legend
+    ask: >
+      Read the legend before anything else on the drawing. Record what each
+      symbol and fill means on THIS sheet.
+    note: >
+      Developers define their own symbols and the definitions carry real
+      consequences. Two seen on one developer's sheet:
+
+        ⋈ hatched bowtie   "Void Space (excluded from strata area)"
+        grey wall fill     "Wall not allowed to be hacked or altered"
+
+      The second is a drawn `not_permitted` input — when the plan says a wall
+      cannot be touched, there is nothing to infer from tenure rules.
+      The first was misread on an earlier analysis as a possible service riser.
+      Never guess a symbol that the sheet defines.
+
+  - id: scale_bar
+    ask: >
+      Is a scale bar printed on the sheet (typically "0 1 3 5m")?
+    note: >
+      CHECK THIS FIRST — it decides the confidence mark on every room dimension
+      below. With a scale bar, measure off the drawing and mark room sizes
+      `measured`. Without one, scale from a standard 0.9m door leaf or a drawn
+      double bed and mark them `inferred`.
+      The scale bar often sits on the legend/key-plan sheet rather than the unit
+      plan, so ask for the full set before concluding there is none.
+
+  - id: area_disclaimer
+    ask: >
+      FIRST. Find the small-print disclaimer, usually bottom-left, stating what
+      the quoted area includes. Quote it verbatim.
+    note: >
+      This single line governs every ratio below and it differs between projects.
+      One older project reads "Area includes a/c ledge, balcony and void area (high
+      ceiling)"; other plans mark the ledge NON-STRATA on the drawing itself.
+      Never assume the convention — two plans from the same year disagree.
+      If there is no disclaimer, that is `unavailable`, not permission to guess.
+
+  - id: strata_area
+    ask: What is the quoted strata area (sq ft and sq m)?
+    note: >
+      Singapore quotes usable area. There is no 公摊面积 / common-area
+      apportionment as in mainland China. Say so when the audience is PRC-origin —
+      it is the single most common imported misconception.
+
+  - id: gfa_harmonisation
+    ask: >
+      Is this a harmonised plan? Decide it from the DRAWING, not from the
+      project's launch date.
+    tells:
+      harmonised: >
+        AC ledge marked NON-STRATA or otherwise excluded; void space excluded
+        from strata area; the disclaimer says the area "excludes, among others,
+        the AC ledge and RC ledge". Most post-2023 launches show all three.
+      pre_harmonisation: >
+        AC ledge, RC ledge and voids sit inside the quoted area, usually with no
+        disclaimer drawing attention to it. One older project reads "Area includes a/c
+        ledge, balcony and void area (high ceiling)".
+    note: >
+      GFA harmonisation aligned the URA and BCA definitions so that AC ledges
+      and voids stopped counting. It applies to developments from around
+      mid-2023 — 1 June 2023 is the date commonly cited, BUT THAT DATE IS NOT
+      VERIFIED IN THIS REPOSITORY and is not in `sgprop`. Do not quote it to a
+      client without checking URA or BCA. The drawing-based tells above need no
+      date and are what the analysis should rely on.
+
+      WHAT IT CHANGES, and this is the part that matters:
+
+      **psf does not compare across the boundary.** A harmonised 614 sqft unit
+      holds more usable floor than a pre-harmonisation 614 sqft unit, because
+      the older one has the ledge and voids inside its number. Comparing a new
+      launch against an older resale at the same quoted size understates the new
+      one. This is the single most useful thing to explain to a buyer, and
+      almost nobody does.
+
+      It also means `ac_ledge_share` below is moot on a harmonised plan — there
+      is no share to compute — and that the older "ledge under 3% is excellent"
+      heuristic is a pre-harmonisation frame that should not be applied to a new
+      launch.
+
+  - id: void_area
+    ask: >
+      Is any part of the quoted area a void / double-height space above the
+      living or dining room?
+    compute: void_sqm / strata_sqm * 100
+    bands:
+      note_only: "Report the percentage; there is no accepted good/bad band."
+    note: >
+      The most expensive thing buyers miss. A void is floor area you are charged
+      for and cannot stand on. One older resale type quotes 131 sqm / 1410 sqft
+      "incl. of 17 sqm / 183 sqft of void area" — 13% of the unit is air.
+      The high ceiling is a genuine amenity, so present the trade honestly:
+      volume bought at floor-area price. Compare the DP-R against the plain DP
+      (114 sqm, no void) before calling the larger unit bigger — it is not.
+      CHECK unit_position BEFORE SCORING A VOID. In an intermediate unit with
+      no side windows, a void at the stair core is the light well — it is
+      buying daylight to the middle of the plate, not wasting area. Report it
+      as a trade, not a cost.
+
+  - id: balcony_share
+    ask: Balcony area as a percentage of strata area.
+    compute: balcony_sqm / strata_sqm * 100
+    bands:
+      good: "<= 5%"
+      acceptable: "<= 8%"
+      poor: "> 8%"
+    note: >
+      Balcony is inside strata area, so it is bought at full psf. This is the
+      largest single "paying for outdoor space" line on most plans.
+
+  - id: ac_ledge_treatment
+    ask: Is the AC ledge marked STRATA or NON-STRATA?
+    bands:
+      good: "NON-STRATA — excluded from quoted area, buyer does not pay psf on it"
+      poor: "STRATA / unmarked — included, buyer pays full psf for an unusable slab"
+    note: >
+      Post-2023 GFA harmonisation pushed ledges out of strata area on newer
+      launches. On older plans the ledge is usually inside it. If marked
+      non-strata, that is a genuine and quotable advantage.
+
+  - id: ac_ledge_share
+    ask: >
+      AC ledge area as a percentage of strata area — PRE-HARMONISATION PLANS
+      ONLY. Skip this entirely when `gfa_harmonisation` says harmonised.
+    bands:
+      excellent: "<= 3%"
+      acceptable: "<= 5%"
+      poor: "> 5%"
+    note: >
+      An established convention in Mandarin SG property commentary, and now a
+      dated one. It was written when the ledge sat inside the quoted area. On a
+      harmonised plan there is no share to compute, and quoting the 3% rule at a
+      new launch signals that the speaker has not noticed the change.
+
+  - id: dead_area
+    ask: >
+      Total area in bay windows, planter boxes, private enclosed space (PES) and
+      household shelter that cannot hold normal furniture.
+    note: >
+      Bay windows and planter boxes were common pre-2009 and are now rare.
+      Household shelter (bomb shelter) is mandatory, counts in area, and cannot
+      be removed — name it, do not treat it as a defect.
+
+# ---------------------------------------------------------------------------
+# Layout. This is where opinion belongs, and where it must stay separable from
+# the measured numbers above.
+# ---------------------------------------------------------------------------
+layout:
+  - id: unit_position
+    ask: >
+      From the key plan: is this unit intermediate, corner, or end? For a condo
+      stack, does it sit mid-block or on a block corner?
+    bands:
+      good: "Corner or end — glazing on two or three elevations"
+      mixed: "Intermediate — light and ventilation from front and rear only"
+    note: >
+      CHECK THIS EARLY. It decides how many elevations carry windows, and every
+      later light and ventilation finding depends on it.
+      An intermediate terrace has party walls both sides and therefore no side
+      windows at all. That is a real cost and buyers pay a corner premium to
+      avoid it — but do not report it as a defect. It is the normal condition
+      for most of a terrace row, it is priced in, and it has one genuine
+      compensation: see cai_wei, where solid side walls are an advantage.
+      Name the neighbours from the key plan (e.g. "Unit 12 sits between 11 and
+      13") rather than saying "no side windows" flatly.
+
+  - id: circulation_type
+    ask: Dumbbell, corridor, L-shaped, or open?
+    bands:
+      good: "Dumbbell — living/dining connects the bedrooms, no dedicated corridor"
+      poor: "Long or L-shaped corridor — area that only gets walked through"
+    note: >
+      Dumbbell is the efficiency winner and the standard on new launches. It is
+      NOT universally preferred: the recurring objection is acoustic privacy,
+      because both bedrooms open onto the shared living space. Record the
+      trade-off, do not score it as a straight win.
+
+  - id: corridor_waste
+    ask: Approximate area given to pure circulation.
+    note: Corridors also tend to be unlit and unventilated. Say which.
+
+  - id: kitchen_type
+    ask: Enclosed, galley, open, or nook? Wet/dry split?
+    note: >
+      Nook kitchens — counters on three sides — draw near-universal approval.
+      A wet/dry split is a premium feature for Chinese cooking: wok work stays
+      behind a door, everyday prep stays open.
+
+  - id: kitchen_ventilation
+    ask: >
+      Does the kitchen have an external window or open to a service yard, or is
+      it internal and mechanically vented only? Can it be closed off by a door?
+    bands:
+      good: "External window or yard, AND a door that closes it off from living"
+      acceptable: "External window, open plan"
+      poor: "Internal, no window, open to living and dining"
+    note: >
+      The decisive check for anyone who cooks with a wok. An open internal
+      kitchen puts oil and smell into the sofa and curtains permanently — the
+      most common renovation regret in Singapore, and not fixable later.
+      Look for a window symbol on the kitchen's external wall; if the kitchen
+      sits inside the floor plate with no external wall, say so plainly.
+
+  - id: entry_sequence
+    ask: What do you see standing at the front door? Is there a foyer or landing zone?
+    note: >
+      Entering directly into a kitchen or dining area rather than a foyer is a
+      recurring complaint, and overlaps with the feng shui checks below.
+      A unit with nowhere to drop shoes and bags is felt daily.
+
+  - id: bedroom_viability
+    ask: >
+      For EACH bedroom: what is the largest bed that fits, and what is left over
+      once it is placed?
+    reference_dimensions_m:
+      single: "0.91 x 1.90"
+      super_single: "1.07 x 1.90"
+      queen: "1.52 x 1.90"
+      king: "1.82 x 1.90"
+      walkway_min: "0.60 — one side of the bed, absolute minimum"
+      wardrobe_swing: "0.75 — clear space to open a hinged wardrobe door"
+    note: >
+      Report as "queen plus 0.7m walkway on one side, no room for a desk", not
+      as "reasonably sized". A room that takes a queen only by blocking the
+      wardrobe does not take a queen — say that. Where the plan prints no
+      dimensions, scale off a drawn double bed or a standard 0.9m door leaf and
+      mark the finding `inferred`.
+      This is the check buyers most often make too late.
+
+  - id: dining_capacity
+    ask: Can the dining zone hold a proper table, and for how many?
+    reference_dimensions_m:
+      four_seater: "1.20 x 0.75"
+      six_seater: "1.80 x 0.90"
+      eight_seater: "2.20 x 1.00"
+      chair_pullout: "0.75 behind each seated edge"
+      walk_behind: "1.00 to pass behind a seated person"
+    note: >
+      A six-seater needs roughly 3.3m x 2.4m of clear floor once pull-out is
+      counted. Round dining tables matter more here than in Western markets —
+      reunion dinners are the use case buyers picture. If only a four-seater
+      fits, that rules the unit out for a family that hosts, and that is a
+      resale point.
+
+  - id: flow
+    ask: >
+      Trace the daily paths — door to kitchen with groceries, kitchen to dining,
+      bedroom to bathroom at night. Do any cross the living room or each other?
+    reference_dimensions_m:
+      walkway_min: "0.60"
+      walkway_comfortable: "0.90"
+      two_people_passing: "1.20"
+    note: >
+      Name the specific bad path rather than scoring flow abstractly. "Groceries
+      cross the living room" is a sentence a viewer recognises from their own
+      home; "poor circulation" is not.
+
+  - id: service_area
+    ask: Where do the washer/dryer, yard and bin go, and is that adjacent to living space?
+    note: A laundry opening onto the dining area is a real liveability cost.
+
+  - id: orientation
+    ask: >
+      Which way does this STACK face? Not this unit type — the stack.
+    method: >
+      1. Read the block and stack list printed beside the unit type (e.g.
+         "819  #02-33 TO #25-33").
+      2. Find that block on the KEY PLAN and locate the shaded stack number.
+      3. Take the north arrow on the key plan and derive the facing of the
+         main glazing.
+      One unit type is built into many stacks across several blocks, and they
+      do NOT share an orientation. A type-level statement about sun or view is
+      wrong by construction — always answer per stack, and say which stack.
+    note: >
+      West-facing living glazing is the standard Singapore complaint (afternoon
+      heat). North-south is preferred, and 南北通透 — through-ventilation front
+      to back — is the phrase a Mandarin audience uses.
+      Only mark `unavailable` when no key plan or north arrow ships with the
+      sheet. Most developer sets include one; check the legend sheet, which is
+      often a separate page from the unit plan.
+
+  - id: external_context
+    ask: >
+      From the key plan: what does this stack actually face — an expressway, a
+      main road, a park or forest, or another block?
+    bands:
+      good: "Park, forest, reservoir or an unbuilt setback"
+      mixed: "Main road — noise, but usually the better view and light"
+      poor: "Expressway frontage, or facing another block at close range"
+    note: >
+      Expressway noise is a permanent, unfixable resale drag and buyers discount
+      for it. Name the actual road, as the key plan labels it, and never a road
+      the sheet does not print: one early analysis placed an expressway on a
+      boundary the brochure labels as a main road.
+      Block-facing-block also costs privacy and light; say which blocks.
+
+# ---------------------------------------------------------------------------
+# Feng shui. Treated strictly as resale-liquidity analysis: these features
+# shrink the buyer pool at exit whether or not anyone in the room believes in
+# them. Never assert a spiritual claim; report the market consequence.
+# ---------------------------------------------------------------------------
+feng_shui:
+  - id: cai_wei
+    zh: 财位 (明财位)
+    ask: >
+      Locate the wealth position and report what physically occupies it.
+    method: >
+      The 明财位 is the corner diagonally opposite the main entrance door, within
+      the living room. Door on the left edge → the far right diagonal corner.
+      Door on the right edge → the far left diagonal corner. Door centred → both
+      diagonal corners qualify; report both.
+      Then state what is actually there.
+
+      WHICH DOOR. Use the pedestrian main entrance — the one guests arrive at.
+      In strata landed and any unit with basement parking there are two
+      candidates: a carpark foyer and a 1st-storey front door. The front door
+      governs; the foyer is a service entrance and does not set the 财位.
+      Reference room is the main living area on the entry level.
+
+      WHEN THE DOOR IS UNCERTAIN. Before marking this `unavailable`, test
+      whether the answer is robust: in an intermediate unit both side boundaries
+      are party walls, so both candidate diagonal corners land on solid wall and
+      the reading holds either way. Say so, and resolve it. Only mark
+      `unavailable` when the door position actually changes the verdict.
+    bands:
+      good: >
+        A solid corner formed by two walls — 藏风聚气, the qi gathers. Lit, and
+        out of the traffic path. Takes a plant, cabinet or safe.
+      poor: >
+        A window or balcony door in the corner (qi disperses), a walkway through
+        it, a toilet on the other side of the wall, or a structural beam over it.
+    consequence: >
+      This is the single most legible feng shui feature on a floorplan and the
+      one a Mandarin-speaking buyer will look for first. It is also the most
+      content-friendly: you can point at the exact corner and say what is there.
+      A 财位 that lands on a full-height window is a real objection at viewing,
+      and unlike orientation it is visible without visiting.
+      Report it as what occupies the corner and what that means to a buyer who
+      cares — never as a prediction about anyone's fortune.
+
+  - id: chuan_tang_sha
+    zh: 穿堂煞
+    ask: Is the front door in a straight line to a window, balcony or rear door?
+    consequence: Most-cited objection. Usually mitigable with a partition or entry cabinet.
+  - id: kai_men_jian_ce
+    zh: 开门见厕
+    ask: Is a toilet directly visible from the front door?
+    consequence: Strong objection, hard to remedy without moving a wall.
+  - id: men_dui_men
+    zh: 门对门
+    ask: Do two doors face each other directly, especially bedroom to bedroom or bedroom to toilet?
+    consequence: Mild. Commonly raised, commonly ignored.
+  - id: kai_men_jian_zao
+    zh: 开门见灶
+    ask: Is the stove visible from the front door?
+    consequence: Moderate.
+  - id: lu_chong
+    zh: 路冲 / T-junction
+    ask: Does the unit face an oncoming road or a building corner?
+    consequence: >
+      Also a genuine noise and privacy issue, so it costs you buyers in both
+      camps. Requires the site plan, not the unit plan — say so if unavailable.
+  - id: que_jiao
+    zh: 缺角
+    ask: Is the floor plate irregular, with a missing corner?
+    consequence: Mild on its own; often correlates with awkward furniture placement.
+
+# ---------------------------------------------------------------------------
+# The verdict. The part that makes this agent work rather than trivia.
+# ---------------------------------------------------------------------------
+resale:
+  - id: buyer_pool
+    ask: Who is the natural buyer, and what does this layout rule out?
+  - id: liquidity_verdict
+    ask: >
+      Does this layout widen or narrow the pool at exit, and which single
+      feature moves it most?
+    note: >
+      The through-line of the whole pillar: what buyers dislike is what is hard
+      to resell. Every analysis must end here.
+  - id: fixable
+    ask: >
+      Sort every flaw into three states — renovable, structural, or not
+      permitted. Never two.
+    states:
+      renovable: >
+        Changeable within the owner's control and budget. A partition, a
+        wardrobe swing, finishes, an open kitchen that can be enclosed.
+        This is a discount a buyer can argue down.
+      structural: >
+        Physically fixed. A central staircase, a missing corner, an
+        intermediate unit's party walls, a void, the quoted area definition.
+      not_permitted: >
+        Physically possible and disallowed. These differ by tenure and are the
+        state most often missed:
+          HDB — no hacking structural walls, no removing the household shelter,
+                HDB approval for most alterations.
+          Condo — MCST approval for anything touching the facade, external
+                penetrations, wet-area relocation or common property.
+          Landed strata — MCST plus, for facade or envelope changes, likely BCA.
+        A window in a party wall is not a budget question. It is not allowed,
+        and it never will be.
+    note: >
+      WHAT IS POSSIBLE AND WHAT IS ALLOWED ARE DIFFERENT SETS. Recommending a
+      change that turns out to need approval nobody will grant is worse than
+      saying nothing, because the owner may act on it.
+
+      Stay on what buyers respond to. Feasibility belongs to an engineer, a
+      contractor or an ID — a salesperson naming a structural remedy is working
+      outside their competence, and the consequences land on the owner.
+
+      Where a remedy exists, name it. A flaw with no path is criticism; a flaw
+      with a named remedy is advice. Where none exists, say so once, plainly,
+      and move on.
+
+      A FOURTH CASE, and it is the one that catches people: renovable,
+      permitted, and still a bad idea. Check every proposed change against
+      `buyer_pool` before recommending it. Combining a second bedroom into the
+      living room of a two-bedder is the standard example — physically easy,
+      usually allowed, and it drops the unit from the two-bedroom rental and
+      resale pool into the much smaller one-bedroom pool.
+      Say who it suits (long-term own-stay) and who it does not (anyone who
+      will sell or let). Never state the remedy without the pool consequence
+      attached; separating them inverts the advice.

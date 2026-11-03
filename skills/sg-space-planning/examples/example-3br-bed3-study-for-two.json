@@ -1,0 +1,59 @@
+{
+ "title": "3-bedroom, bedroom 3 (2.3 m wide): study for a couple who both work from home",
+ "units": "metres; origin = door-wall left corner (left as you face the window); x across, y toward the window",
+ "room": {
+  "w": 2.3,
+  "d": 3.1
+ },
+ "door_entry": {
+  "x": 1.45,
+  "y": 0.0,
+  "w": 0.85,
+  "d": 0.8
+ },
+ "fixed": [
+  {
+   "name": "bedroom door swing (hinged at right wall, opens in)",
+   "kind": "door_swing",
+   "x": 1.45,
+   "y": 0.0,
+   "w": 0.85,
+   "d": 0.85
+  }
+ ],
+ "items": [
+  {
+   "name": "built-in wardrobe (developer; hinged doors assumed)",
+   "x": 0.0,
+   "y": 0.0,
+   "w": 1.4,
+   "d": 0.7,
+   "use": {
+    "side": "+y",
+    "depth": 0.9
+   }
+  },
+  {
+   "name": "desk A 1.2x0.6 under window",
+   "x": 0.0,
+   "y": 2.5,
+   "w": 1.2,
+   "d": 0.6,
+   "use": {
+    "side": "-y",
+    "depth": 0.9
+   }
+  },
+  {
+   "name": "desk B 1.0x0.5 under window",
+   "x": 1.3,
+   "y": 2.6,
+   "w": 1.0,
+   "d": 0.5,
+   "use": {
+    "side": "-y",
+    "depth": 0.9
+   }
+  }
+ ]
+}

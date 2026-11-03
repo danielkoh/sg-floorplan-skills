@@ -1,0 +1,18 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "sg-floorplan-skills",
+  "owner": { "name": "bluebed", "url": "https://property.bluebed.ai" },
+  "metadata": {
+    "description": "Open-source skills for reading Singapore condo floor plans: measurement, buyer-deterring layout issues, geometry-checked furniture layouts, and sourced renovation rules. Not legal or renovation advice."
+  },
+  "plugins": [
+    {
+      "name": "sg-floorplan-skills",
+      "source": "./",
+      "description": "Three skills: sg-floorplan-analysis (read and measure a plan), sg-space-planning (layout issues, fit-checked layouts, wall type from the plan) and sg-reno-rules (what an owner may change, with verbatim sources).",
+      "author": { "name": "bluebed", "url": "https://property.bluebed.ai" },
+      "category": "real-estate",
+      "keywords": ["singapore", "floor-plan", "condo", "space-planning", "interior-design", "renovation", "property", "claude-skills"]
+    }
+  ]
+}

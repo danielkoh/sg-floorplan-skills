@@ -1,0 +1,225 @@
+# Singapore renovation rules for condos and ECs — what an owner may drill, fix, swap or enclose,
+# with provenance. HDB rules are out of scope (the series is condo new launches); add them only
+# when an HDB episode is planned.
+# Same contract as sgprop: quote the rule and its source before any claim; never answer from memory.
+#
+# status:
+#   allowed       — the source permits it outright
+#   conditional   — permitted only under the stated conditions; say the conditions
+#   not_allowed   — the source prohibits it
+#   check_mcst    — depends on the development's own by-laws or MCST guidelines; say "check with
+#                   your MCST", never "yes" or "no"
+#   unverified    — taken from a secondary source or an official page whose text could not be read;
+#                   NOT sayable on camera until a primary quote is added and status changed
+#
+# grade: official (statute, regulator page or code) | operator (the agent's own professional
+#        knowledge, dated) | secondary (law-firm, media, retailer)
+# Re-fetch anything older than 90 days before quoting it to a client: python3 verify.py
+
+version: 1
+updated: 2026-11-03
+
+rules:
+
+  # ---------------- Household shelters (HDB, EC, condo, landed — all HS) ----------------
+
+  - id: hs_drill_internal
+    applies_to: [condo, ec, landed]
+    topic: household shelter — fixing shelves or cabinets
+    status: conditional
+    rule: >
+      Drilling into the internal face of household-shelter walls and ceiling slabs is permitted to a
+      depth of not more than 50 mm, to fix inserts and removable screws. Fixtures such as cabinets
+      or shelves on internal HS walls must be removed by the owner within 48 hours of notification.
+      Non-metallic inserts must not exceed 50 mm in length.
+    quote: "Drilling into internal face of HS walls and ceiling slabs to a depth of not more than 50mm"
+    say: "You can fix shelves inside the shelter with short screws, as long as they can come off within 48 hours if you're told to."
+    do_not_say: ["you can't drill in a bomb shelter at all", "anything goes in the shelter"]
+    source: {title: "SCDF Technical Requirements for Household and Storey Shelters 2023, cl. 7.2.1(g)",
+             url: "https://www.scdf.gov.sg/civil-defence-shelter/acts-and-requirements/table-of-content/chapter-7---permitted-and-not-permitted-works-in-hs-tower/clause-7.2-permitted-and-not-permitted-works/",
+             page_updated: 2025-03-16, fetched: 2026-11-03, grade: official}
+
+  - id: hs_not_permitted
+    applies_to: [condo, ec, landed]
+    topic: household shelter — hacking, door, vents, wall finishes
+    status: not_allowed
+    rule: >
+      Not permitted: hacking or drilling HS walls, floor and ceiling slabs (other than 7.2.1(g)/(h));
+      power-driven nails into internal HS walls; modifying, removing or tampering with the HS door;
+      tampering with ventilation openings and plates; wall tiles, plaster or stone spray on the
+      internal wall faces; a second layer of floor tiles; cornices inside the HS.
+    quote: "Modifying, changing, removing or tampering with the HS door"
+    say: "The shelter door and its vents stay as they are, and the walls can't be hacked or tiled inside."
+    source: {title: "SCDF TRHS 2023, cl. 7.2.2",
+             url: "https://www.scdf.gov.sg/civil-defence-shelter/acts-and-requirements/table-of-content/chapter-7---permitted-and-not-permitted-works-in-hs-tower/clause-7.2-permitted-and-not-permitted-works/",
+             page_updated: 2025-03-16, fetched: 2026-11-03, grade: official}
+
+  - id: hs_finishes_allowed
+    applies_to: [condo, ec, landed]
+    topic: household shelter — paint and flooring
+    status: conditional
+    rule: >
+      Permitted: painting walls, ceiling and door (not over the door notice, locking bolts or seal);
+      floor tiles bonded with wet cement mortar, total finish and screed not over 50 mm; skirting up
+      to 100 mm; vinyl or linoleum flooring.
+    quote: "Laying of vinyl or linoleum flooring."
+    say: "You can paint the shelter and lay vinyl flooring in it."
+    source: {title: "SCDF TRHS 2023, cl. 7.2.1(a)-(e)",
+             url: "https://www.scdf.gov.sg/civil-defence-shelter/acts-and-requirements/table-of-content/chapter-7---permitted-and-not-permitted-works-in-hs-tower/clause-7.2-permitted-and-not-permitted-works/",
+             page_updated: 2025-03-16, fetched: 2026-11-03, grade: official}
+
+  # ---------------- Condominiums and ECs (strata) ----------------
+
+  - id: wall_type_from_plan
+    applies_to: [condo, ec, landed]
+    topic: whether a wall can come down
+    status: conditional
+    rule: >
+      On developer floor plans, walls drawn with a solid shaded fill are structural (reinforced
+      concrete) and cannot be hacked; walls drawn as an outline are non-structural partitions.
+      Read it per wall with sg-space-planning's walltype.py and check the sheet's legend if it has
+      one. Removing an outlined wall in a condo or EC is still a renovation: the development's
+      own by-laws and MCST approval apply (strata_additional_bylaws). Household-shelter walls are
+      shaded and never removable (hs_not_permitted).
+    quote: "Wall not allowed to be hacked or altered"
+    say: "On the floor plan, the solid shaded walls stay. The outlined ones are partitions; taking one down still needs your MCST's renovation approval."
+    do_not_say: ["you can knock this wall down", "any wall can come down with approval"]
+    source: {title: "Developer plan legend convention (grey wall fill printed as 'Wall not allowed to be hacked or altered' on a 2026 developer brochure legend); practitioner knowledge of a CEA-registered agent",
+             url: "https://property.bluebed.ai",
+             fetched: 2026-11-03, grade: operator,
+             note: "not a regulator quote; confirm against the sheet's own legend or the structural plans for any specific unit before a client acts on it"}
+
+  - id: strata_common_property_fixing
+    applies_to: [condo, ec]
+    topic: drilling or screwing into common property
+    status: check_mcst
+    rule: >
+      Prescribed by-law 5(1): a subsidiary proprietor or occupier shall not mark, paint, drive nails or
+      screws or the like into, or otherwise damage or deface any structure that forms part of the
+      common property, except with the MC's prior written approval. Approval does not authorise
+      additions to common property (5(2)). Which walls are common property and which belong to the
+      lot depends on the strata plan, so a buyer cannot tell from a floor plan.
+    quote: "shall not mark, paint, drive nails or screws or the like into, or otherwise damage or deface"
+    say: "Before drilling into a wall, check with your MCST whether that wall is common property."
+    do_not_say: ["you can drill anywhere inside your unit", "you need approval to hang a picture"]
+    source: {title: "Building Maintenance (Strata Management) Regulations 2005, Second Schedule, by-law 5(1)-(2) (BCA copy)",
+             url: "https://bca.gov.sg/publications/BMSM/BM_strata_mgt_reg.html",
+             fetched: 2026-11-03, grade: official,
+             note: "BCA's published copy; confirm against Singapore Statutes Online for amendments"}
+
+  - id: strata_exempt_devices
+    applies_to: [condo, ec]
+    topic: safety devices, insect screens, child-safety, decor fixings
+    status: conditional
+    rule: >
+      By-law 5(3): by-law 5 does not stop an owner installing a locking or safety device for the lot,
+      a screen to keep out animals or insects, a structure or device to prevent harm to children, or
+      a device to affix decorative items to the internal surfaces of walls in the lot. By-law 5(4):
+      it must be installed competently and look in keeping with the MC's guidelines and the rest of
+      the building. 5(5): the owner maintains it and repairs any damage to common property.
+    quote: "any structure or device to prevent harm to children"
+    say: "Child-safety fittings, insect screens and picture hooks don't need MCST approval, but they must match the MCST's guidelines on looks."
+    source: {title: "BMSMR 2005, Second Schedule, by-law 5(3)-(5) (BCA copy)",
+             url: "https://bca.gov.sg/publications/BMSM/BM_strata_mgt_reg.html",
+             fetched: 2026-11-03, grade: official}
+
+  - id: strata_laundry_visible
+    applies_to: [condo, ec]
+    topic: drying laundry where it is seen from outside
+    status: conditional
+    rule: >
+      By-law 10: without the MC's prior written approval, no washing, towel, bedding or clothing may
+      be hung anywhere on the parcel where it is visible from outside the building, other than at
+      areas designated for the purpose and only for a reasonable period. Additional by-laws of a
+      development may be stricter.
+    quote: "other than at areas designated for the purpose and there only for a reasonable period"
+    say: "Laundry that can be seen from outside goes only where your condo designates it, so check before buying a balcony rack."
+    do_not_say: ["you can dry clothes on the balcony", "drying racks are banned"]
+    source: {title: "BMSMR 2005, Second Schedule, by-law 10 (BCA copy)",
+             url: "https://bca.gov.sg/publications/BMSM/BM_strata_mgt_reg.html",
+             fetched: 2026-11-03, grade: official}
+
+  - id: strata_items_at_windows_balcony
+    applies_to: [condo, ec]
+    topic: things placed on or by windows and balconies
+    status: not_allowed
+    rule: >
+      By-law 18(3): an owner or occupier shall not place or display items on or by windows,
+      balconies or outside the lot where they could damage property or injure people.
+    quote: "shall not place, put up or display any article or object on or by any window or on any balcony of, or outside, the lot in a manner which is likely to cause any damage to property or injury to life"
+    say: "Nothing goes on the ledge or balcony edge where it could fall."
+    source: {title: "BMSMR 2005, Second Schedule, by-law 18(3) (BCA copy)",
+             url: "https://bca.gov.sg/publications/BMSM/BM_strata_mgt_reg.html",
+             fetched: 2026-11-03, grade: official}
+
+  - id: balcony_no_enclosure
+    applies_to: [condo, ec]
+    topic: enclosing a balcony
+    status: not_allowed
+    rule: >
+      Balconies shall not be enclosed with walls or glass panels; they are semi-outdoor spaces.
+      Balcony screens are allowed only in a design approved with the development (fully retractable,
+      naturally ventilated even when closed), and owners must follow the MCST's design guidelines.
+      Blinds count as furnishing and are allowed without URA planning permission.
+    quote: "Balconies shall not be enclosed with walls or glass panels as balconies are meant to be semi-outdoor spaces."
+    say: "A balcony can't be glassed in. Approved retractable screens or blinds are the options."
+    do_not_say: ["make the balcony part of the living room", "glass in the balcony with MCST approval"]
+    source: {title: "URA Development Control Handbook — Balconies, PES, PRT and Indoor Recreation Spaces",
+             url: "https://www.ura.gov.sg/guidelines/development-control/development-control-handbooks/residential/flats-condominiums/balconies-pes-prt/",
+             page_updated: 2026-07-06, fetched: 2026-11-03, grade: official}
+
+  - id: strata_additional_bylaws
+    applies_to: [condo, ec]
+    topic: renovation approval in general
+    status: check_mcst
+    rule: >
+      Each development may adopt additional by-laws stricter than the prescribed ones — for example
+      requiring the MC's written approval before installing balcony grilles or altering a balcony.
+      Renovation notice, hours and approvals are set by each MCST.
+    quote: "no balcony grilles shall be installed except with the prior approval in writing of the Management Corporation"
+    say: "Every condo has its own renovation rules, so check the by-laws before you plan the work."
+    source: {title: "[2022] SGHC 280 (High Court), quoting a development's additional by-laws",
+             url: "https://www.elitigation.sg/gd/s/2022_SGHC_280",
+             fetched: 2026-11-03, grade: secondary,
+             note: "illustrates that additional by-laws exist; the rule itself is per development"}
+
+  # ---------------- Gas and electrical (all housing types) ----------------
+
+  - id: gas_works_licensed
+    applies_to: [condo, ec, landed]
+    topic: removing or changing a gas hob; capping a gas point
+    status: conditional
+    rule: >
+      Since 14 Feb 2008, the installation, testing, maintenance and repair of gas appliances connected
+      to the gas pipeline (gas cookers, burners, water heaters) must be done by a licensed person;
+      for homes, City Energy or a Licensed Gas Service Worker. Doing it unlicensed is an offence.
+    quote: "gas installation works can only be carried out by City Energy or a Licensed Gas Service Worker (LGSW)"
+    say: "Taking out a gas hob is a job for a licensed gas worker or City Energy, not a general contractor."
+    source: {title: "EMA — Engaging licensed workers (gas); Gas Act and Gas (Supply) Regulations",
+             url: "https://ema.gov.sg/consumer-information/gas/engaging-licensed-workers",
+             fetched: 2026-11-03, grade: official}
+
+  - id: electrical_works_licensed
+    applies_to: [condo, ec, landed]
+    topic: new circuit for an induction hob
+    status: unverified
+    rule: >
+      Electrical installation work, such as a new circuit for an induction hob, must be done by a
+      Licensed Electrical Worker.
+    quote: null
+    say: null
+    source: {title: "EMA electrical worker licensing (not yet quoted)",
+             url: "https://www.ema.gov.sg/consumer-information/electricity/engaging-licensed-workers",
+             fetched: 2026-11-03, grade: secondary,
+             note: "LEW requirement not yet quoted from EMA; paste the quote to promote"}
+
+# Map from sg-space-planning workarounds to the rules that govern them.
+workarounds:
+  "swap a gas hob for induction": [gas_works_licensed, electrical_works_licensed, strata_additional_bylaws]
+  "add a glass sliding partition": [strata_additional_bylaws]
+  "ceiling or balcony drying rack": [strata_laundry_visible, strata_items_at_windows_balcony, strata_additional_bylaws]
+  "tall cabinet anchored to a wall": [strata_common_property_fixing, strata_exempt_devices, hs_drill_internal]
+  "shelves inside the household shelter": [hs_drill_internal, hs_not_permitted]
+  "glass in the balcony": [balcony_no_enclosure]
+  "items on the air-con ledge": [strata_items_at_windows_balcony]
+  "knock down a bedroom wall": [wall_type_from_plan, strata_additional_bylaws]

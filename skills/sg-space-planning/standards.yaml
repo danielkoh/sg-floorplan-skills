@@ -1,0 +1,68 @@
+# Sizes and clearances for furnishing Singapore homes.
+# Every value carries a source and a grade. Read this file at the start of every layout.
+#
+# grade:
+#   official    — a government or standards body (SCDF, HDB, BCA, URA, SS/ISO)
+#   industry    — a published design or ergonomics guide, or several vendors agreeing
+#   retailer    — one or more SG retailers' size guides; fine for sizes, weak for clearances
+#   assumption  — our planning default, stated so it can be challenged; say "about" in copy
+#
+# Values are metres. "min" is what the fit check uses by default; "comfortable" is what a
+# script may call "comfortable". Never call a layout comfortable on a min value.
+
+version: 1
+updated: 2026-11-03
+
+beds:   # mattress footprint, width x length; all four SG sizes are 1.90 m long
+  single:       {w: 0.91, l: 1.90, grade: retailer, source: S1}
+  super_single: {w: 1.07, l: 1.90, grade: retailer, source: S1}
+  queen:        {w: 1.52, l: 1.90, grade: retailer, source: S1, note: "some retailers list 1.53"}
+  king:         {w: 1.83, l: 1.90, grade: retailer, source: S1, note: "some retailers list 1.82"}
+  frame_allowance: {each_side: 0.05, foot: 0.05, grade: assumption,
+                    note: "add to the mattress for a bed frame; a platform or storage bed may need 0.10"}
+  cot_european: {w: 0.60, l: 1.20, grade: retailer, source: S2, note: "mattress; the frame adds ~0.05-0.10 a side"}
+  cot_american: {w: 0.70, l: 1.30, grade: retailer, source: S2, note: "some SG cots are 0.70 x 1.40"}
+
+storage:
+  wardrobe_depth:         {standard: 0.60, shallow: 0.40, grade: retailer, source: S3}
+  wardrobe_front_hinged:  {min: 0.90, grade: retailer, source: S3, note: "measured with a door fully open"}
+  wardrobe_front_sliding: {min: 0.60, grade: retailer, source: S3}
+
+clearances:
+  bed_side_walkway:  {min: 0.60, grade: industry, source: S4, note: "sides and foot that are used"}
+  bed_side_tight:    {min: 0.45, grade: assumption,
+                      note: "squeeze-past only; never call it comfortable, say 'a tight squeeze' in copy"}
+  main_route:        {min: 0.75, comfortable: 0.90, grade: industry, source: S4,
+                      note: "door to wardrobe, door to en suite; shared bedrooms 0.90"}
+  behind_desk_chair: {min: 0.90, comfortable: 1.05, grade: industry, source: S5,
+                      note: "from desk edge to the nearest obstacle behind the seated person"}
+  person_width:      {value: 0.60, grade: assumption, note: "the fit check's walking disk"}
+  bedroom_door_swing: {value: "leaf width as drawn, else 0.80-0.90", grade: retailer, source: S3,
+                      note: "read the arc off the plan; never place an item inside it"}
+
+furniture:   # typical footprints, w x d; use the plan's drawn size if it differs
+  desk_standard:   {w: 1.20, d: 0.60, grade: industry, source: S5}
+  desk_compact:    {w: 1.00, d: 0.50, grade: assumption}
+  office_chair:    {w: 0.65, d: 0.65, grade: assumption}
+
+unavailable:   # do not state these until a source is added here
+  - bunk and loft-bed headroom against ceiling height
+  - wall-bed (Murphy) cabinet depths and open lengths — read them from a named product's spec sheet
+  - sofa, dining and TV-viewing distances
+  - anything fixed to a wall, ceiling, balcony or household shelter (that is a renovation rule, not a size)
+
+sources:
+  S1: {title: "Megafurniture.sg mattress size guides (multiple articles agree)",
+       url: "https://megafurniture.sg/blogs/articles/super-single-mattress-size-singapore-guide",
+       fetched: 2026-11-03}
+  S2: {title: "Hatchery (SG) and Megafurniture cot-size guides; IKEA SNIGLAR 60x120 interior",
+       url: "https://hatchery.com.sg/mattresses", fetched: 2026-11-03}
+  S3: {title: "Lazada SG home guides on HDB bedroom wardrobe dimensions and walkways",
+       url: "https://home.lazada.sg/how-to-choose-wardrobe-dimensions-for-an-hdb-bedroom-without-blocking-walkways-sg/",
+       fetched: 2026-11-03}
+  S4: {title: "Simba Sleep, how much space do you need around a bed; Casa Padrino bedroom clearances",
+       url: "https://simbasleep.com/blogs/night-life/how-much-space-do-you-need-around-bed",
+       fetched: 2026-11-03}
+  S5: {title: "OfficeFurniture2Go desk space planning guide (36 in min, 42-48 in recommended behind a chair)",
+       url: "https://www.officefurniture2go.com/answers/desk-space-planning/minimum-clearance-behind-desk-chair.html",
+       fetched: 2026-11-03}
