@@ -1,8 +1,8 @@
 # sg-floorplan-skills
 
 Open-source skills that let Claude and other AI assistants **read a Singapore condo floor plan
-the way a careful agent would**: measure it, find the layout issues that put buyers off, lay out
-the rooms for a real household with a geometry check, and say what an owner may change — each
+the way a careful agent would**: measure it, see which households each layout suits, lay out
+the rooms so every space works, with a geometry check, and say what an owner may change — each
 rule quoted from its source.
 
 > **Not legal, renovation or property advice.** These skills present measurements, checks and
@@ -14,10 +14,10 @@ rule quoted from its source.
 | Skill | What it does |
 |---|---|
 | `sg-floorplan-analysis` | Reads a developer floor plan into a fixed, comparable schema: area accounting (strata, balcony, AC ledge, voids), layout, bedrooms, orientation per stack, feng shui as resale liquidity. `measure.py` sizes rooms exactly from vector PDFs. |
-| `sg-space-planning` | Finds buyer-deterring layout issues (`issues.py`), lays rooms out for a household and **proves the layout fits** (`fit.py`: overlaps, door swings, use zones, walkways, wall beds open and closed), and reads whether a wall is structural off the plan image (`walltype.py`). Sizes and clearances in `standards.yaml`, each with a source and grade. |
+| `sg-space-planning` | Reads what each layout suits and how to make it work (`traits.py`), lays rooms out for a household and **proves the layout fits** (`fit.py`: overlaps, door swings, use zones, walkways, wall beds open and closed), and reads whether a wall is structural off the plan image (`walltype.py`). Sizes and clearances in `standards.yaml`, each with a source and grade. |
 | `sg-reno-rules` | What a condo or EC owner may drill, fix, swap or enclose — household shelters (SCDF), strata by-laws, balcony enclosure (URA), gas works (EMA) — each rule with a verbatim quote, URL, grade and fetch date. `verify.py` prints a sayable line only for verified, fresh rules. |
 
-The three work together: an issue found by `sg-space-planning` that needs a renovation is checked
+The three work together: an idea from `sg-space-planning` that needs a renovation is checked
 against `sg-reno-rules` before anyone says it can be done.
 
 ## Install
@@ -43,15 +43,15 @@ Or copy any `skills/<name>/` folder into your agent's skills directory. Python 3
 ## Try it
 
 ```bash
-python3 skills/sg-space-planning/issues.py example-residences --data-dir tests/fixtures --type 2A
+python3 skills/sg-space-planning/traits.py example-residences --data-dir tests/fixtures --type 2A
 python3 skills/sg-space-planning/fit.py skills/sg-space-planning/examples/example-2br-bed2-wallbed-FAIL.json
-python3 skills/sg-reno-rules/verify.py --workaround "glass in the balcony"
+python3 skills/sg-reno-rules/verify.py --idea "glass in the balcony"
 ```
 
 ## What it runs
 
 Only the bundled Python scripts, on your machine, when your agent calls them: `measure.py`,
-`fit.py`, `issues.py`, `walltype.py` and `verify.py`. They read the files you point them at
+`fit.py`, `traits.py`, `walltype.py` and `verify.py`. They read the files you point them at
 (a plan PDF or image, a layout JSON, your checklist folder) and print a report. Nothing is sent
 or fetched over the network, there are no hooks or MCP servers, and nothing is installed. The
 source URLs in `rules.yaml` are references for a person to open; the scripts never request them.

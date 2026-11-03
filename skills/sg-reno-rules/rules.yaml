@@ -213,8 +213,8 @@ rules:
              fetched: 2026-11-03, grade: secondary,
              note: "LEW requirement not yet quoted from EMA; paste the quote to promote"}
 
-# Map from sg-space-planning workarounds to the rules that govern them.
-workarounds:
+# Map from sg-space-planning ideas (traits.yaml make_it_work) to the rules that govern them.
+ideas:
   "swap a gas hob for induction": [gas_works_licensed, electrical_works_licensed, strata_additional_bylaws]
   "add a glass sliding partition": [strata_additional_bylaws]
   "ceiling or balcony drying rack": [strata_laundry_visible, strata_items_at_windows_balcony, strata_additional_bylaws]

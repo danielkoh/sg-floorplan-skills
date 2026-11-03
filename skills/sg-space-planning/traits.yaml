@@ -1,0 +1,254 @@
+# What each layout suits, and how to make it work. Read by traits.py; read it yourself before
+# writing any trait into a script.
+#
+# Detection reads floorplan checklist rows: <data-dir>/<slug>/floorplan-checklist.draft.json
+# (see CHECKLIST.md). A detected trait is a lead until it is confirmed on the plan image.
+#
+# Wording: every trait is described by what it gives a household, then who it suits, then who
+# should plan ahead for it. Never "problem", "issue", "flaw", "waste" or "put buyers off".
+# suits / plan_ahead are judgements about households, not data. They name household make-up,
+# habits and stage of life only, never race, religion, nationality or anything else a buyer
+# cannot change about themselves. Say "suits", never "this unit is for X".
+#
+# make_it_work: loose furniture and habits. Anything fixed, wired, plumbed or hacked is tagged
+# needs_reno_check and is said only once sg-reno-rules confirms it:
+#   python3 <sg-reno-rules>/verify.py --idea "<reno_idea>"
+
+version: 2
+updated: '2026-11-03'
+traits:
+- id: kitchen_internal
+  rubric: kitchen_ventilation
+  title: Internal kitchen, ventilated by its hood
+  detect:
+    field: kitchen_window
+    pattern: none|internal
+  day_to_day: Cooking smells clear through the hood rather than a window, and the facade goes to the
+    living room and bedrooms.
+  suits:
+  - households that cook light — steaming, air-fryer, reheating — or eat out most weekdays
+  - couples without children who order in or eat at the office
+  - tenants and investors renting to working professionals
+  plan_ahead:
+  - 'families who wok-fry daily: run the hood well and keep a purifier nearby'
+  - households where a helper cooks every meal
+  make_it_work:
+  - keep the hood running for a while after cooking, not just while the wok is on (habit)
+  - a freestanding air purifier sized for the living-dining area
+  - text: swap a gas hob for induction
+    needs_reno_check: true
+    reno_idea: swap a gas hob for induction
+- id: kitchen_window_to_ledge
+  rubric: kitchen_ventilation
+  title: Kitchen window opens onto the AC ledge
+  unless:
+  - kitchen_internal
+  detect:
+    any:
+    - field: kitchen_window
+      pattern: ledge
+    - field: minuses
+      pattern: kitchen[^|]{0,80}(window|air)[^|]{0,60}(ac|a/c) ledge|kitchen[^|]{0,60}ledge recess
+  day_to_day: The kitchen gets its own window for air; the outlook is the service ledge.
+  suits:
+  - light cooks
+  - households who use the kitchen mainly in the evening
+  plan_ahead:
+  - 'daily heavy cooking: pair the window with the hood'
+  make_it_work:
+  - keep the window and the hood both working when cooking (habit)
+- id: open_kitchen
+  rubric: kitchen_ventilation
+  title: Open kitchen joined to the living and dining
+  detect:
+    any_field:
+    - kitchen_enclosure
+    - minuses
+    pattern: open kitchen|kitchen (is )?(fully )?open|cannot be closed off|no way to close it off
+  day_to_day: 'Cooking happens in the same space as the household: easy to talk while cooking, and the
+    room reads larger.'
+  suits:
+  - light cooks; people who like to talk to guests while cooking
+  - couples without children
+  plan_ahead:
+  - 'wok cooking households: choose wipeable fabrics and run the hood'
+  make_it_work:
+  - fabric choices that wipe or wash (loose covers, washable curtains)
+  - text: add a glass sliding partition
+    needs_reno_check: true
+    reno_idea: add a glass sliding partition
+- id: no_foyer
+  rubric: entry_sequence
+  title: Front door opens straight into the home
+  detect:
+    any_field:
+    - minuses
+    - family_name
+    pattern: no foyer|walk in through the kitchen|front door opens into the kitchen|entry strip runs straight
+      into the kitchen
+  day_to_day: Every square foot goes to rooms rather than an entrance hall; shoes and bags need a planned
+    spot by the door.
+  suits:
+  - one or two adults with few shoes and few visitors
+  plan_ahead:
+  - families with children (shoes, prams, school bags)
+  - households who host often
+  make_it_work:
+  - a slim shoe cabinet (0.30–0.35 m deep) on the entry wall, if the door swing allows — check with fit.py
+  - a runner rug and a wall-free coat stand to mark a landing zone
+- id: high_circulation
+  rubric: corridor_share
+  title: Bedrooms set apart along a corridor
+  detect:
+    computed: circulation_top_quartile
+  day_to_day: 'The corridor keeps the bedrooms away from the living room: quieter nights, more privacy
+    between generations.'
+  suits:
+  - households who value bedrooms tucked away from the living room — the corridor buys that separation
+  - multi-generation households (privacy between generations)
+  plan_ahead:
+  - anyone comparing price per usable square foot
+  make_it_work:
+  - a corridor wide enough (0.9 m+) can take a 0.30 m-deep bookcase or shoe cabinet — check with fit.py
+    routes
+  - wall-free runner lighting (plug-in) for an unlit corridor
+- id: bathroom_no_window
+  rubric: null
+  title: Bathrooms ventilated by exhaust fan
+  detect:
+    field: bathrooms_without_window
+    pattern: ^(?!none)(?!\s*$).+
+    exclude: assessed|unavailable|ledge-only
+  day_to_day: The fan clears steam; the facade is left for the living spaces.
+  suits:
+  - most households who run the fan and dry towels elsewhere
+  plan_ahead:
+  - households who air-dry towels in the bathroom
+  make_it_work:
+  - leave the exhaust fan running after showers (habit)
+  - a squeegee and a small portable dehumidifier
+- id: no_shelter_no_yard
+  rubric: service_area
+  title: 'No household shelter or yard: storage and laundry planned into the rooms'
+  detect:
+    all:
+    - field: household_shelter
+      pattern: ^none|none drawn|no hs
+    - field: yard
+      pattern: ^none
+  day_to_day: The floor area goes to living space rather than a store room; bulky items and laundry get
+    a planned home.
+  suits:
+  - minimalist couples and singles; tenants
+  - households who use a washer-dryer and own few bulky items
+  plan_ahead:
+  - families with prams, toys and seasonal items
+  - households with a helper
+  make_it_work:
+  - bed frames with lift-up storage
+  - one tall freestanding cabinet where a wall allows — check with fit.py
+  - washer-dryer use instead of air-drying (the units already ship with WD in most of these plans; confirm
+    on the plan)
+  - text: ceiling or balcony drying rack
+    needs_reno_check: true
+    reno_idea: ceiling or balcony drying rack
+- id: study_open_niche
+  rubric: null
+  title: Open study nook
+  detect:
+    any_field:
+    - study
+    - minuses
+    pattern: niche|alcove|study[^|]{0,40}(no window|no door|has no window)
+  day_to_day: A desk spot that stays part of the home, without giving up a room.
+  suits:
+  - people who work from home now and then, or only take few calls
+  - a child's homework corner
+  plan_ahead:
+  - two people on calls from home all day
+  make_it_work:
+  - a compact desk (0.5–0.6 m deep) and a closed-back chair facing the wall
+  - a freestanding folding screen behind the chair — check the route past it with fit.py
+  - a noise-cancelling headset (habit)
+- id: master_borrowed_light
+  rubric: null
+  title: Master suite with its study as the window side
+  detect:
+    any_field:
+    - minuses
+    pattern: master (bedroom )?has no window
+  day_to_day: The master and study read as one suite, with daylight through the study.
+  suits:
+  - a couple who use the study as a dressing room or a nursery joined to the master
+  plan_ahead:
+  - anyone planning to give the study to someone else
+  make_it_work:
+  - keep the study open and furnish it as part of the master suite
+- id: shared_bathroom_two_bedrooms
+  rubric: null
+  title: One bathroom shared by two bedrooms
+  detect:
+    field: bed_bath
+    pattern: 2 bed[^/]*/ 1 bath
+  day_to_day: 'A simpler, more compact layout: one bathroom to clean and maintain.'
+  suits:
+  - singles and couples who use the second bedroom as a study or guest room
+  plan_ahead:
+  - flatmates
+  - a parent living in
+  make_it_work: []
+- id: tight_master_queen
+  rubric: bedroom_viability
+  title: Master suits a queen against one wall
+  detect:
+    computed: bed_with_both_sides
+    room: master
+    bed_w: 1.62
+    bed_l: 1.95
+    side: 0.6
+    foot: 0.6
+    note: queen 1.52 x 1.90 plus 0.05 frame a side (standards.yaml); both orientations tried; a wardrobe
+      inside the room size is taken off either wall. Rooms whose size excludes the wardrobe may still
+      be tighter — confirm on the plan
+  day_to_day: A queen sits well with one side to the wall, leaving the other side wide.
+  suits:
+  - one sleeper, or a couple happy with the bed against a wall
+  plan_ahead:
+  - couples who both want their own bedside
+  make_it_work:
+  - a queen with one side against the wall leaves the other side wide — check with fit.py
+  - a super single for one sleeper
+- id: narrow_bedroom
+  rubric: bedroom_viability
+  title: A compact bedroom, 2.4 m or narrower
+  detect:
+    computed: any_bedroom_min_side_at_most
+    threshold_m: 2.4
+    note: room size may include a 0.6-0.75 m wardrobe; clear floor is smaller — confirm on the plan
+  day_to_day: Right-sized for a single or super single, a child's room or a study.
+  suits:
+  - a young child; a study or guest room; one adult
+  plan_ahead:
+  - a couple in that room
+  - two children sharing
+  make_it_work:
+  - a single or super single along the long wall — check with fit.py
+  - bed with storage under it instead of a chest of drawers
+- id: two_bedrooms_only
+  rubric: null
+  title: Two bedrooms
+  detect:
+    field: category
+    pattern: ^2-Bedroom
+  day_to_day: Easier to run and to let, with a second room that can be a study or guest room.
+  suits:
+  - couples without children (DINKs); singles; a couple with one baby for the first few years
+  - investors renting to two professionals
+  plan_ahead:
+  - families planning two or more children
+  - a parent living in
+  make_it_work:
+  - second bedroom as a study-guest room (desk plus single bed) — check with fit.py
+  - text: open bedroom 2 into the living room, only where its wall is drawn as an outline (walltype.py)
+    needs_reno_check: true
+    reno_idea: knock down a bedroom wall

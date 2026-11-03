@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Scan floorplan checklist rows for layout issues that put buyers off.
+"""Scan floorplan checklist rows for layout traits: what each layout suits, and how to make it work.
 
 Usage:
-    python3 issues.py <slug> [<slug> ...]          # per-type table, then per-issue summary
-    python3 issues.py <slug> --type "2BR S1"       # one unit type, with workarounds and households
-    python3 issues.py --all                        # every project with a checklist
+    python3 traits.py <slug> [<slug> ...]          # per-type table, then how common each trait is
+    python3 traits.py <slug> --type "2BR S1"       # one unit type, with who it suits and how to make it work
+    python3 traits.py --all                        # every project with a checklist
     add --json for machine-readable output
 
-Reads <data-dir>/<slug>/floorplan-checklist.draft.json and issues.yaml. The data dir is
+Reads <data-dir>/<slug>/floorplan-checklist.draft.json and traits.yaml. The data dir is
 --data-dir <dir>, else $SG_FLOORPLAN_DATA, else the current directory. Every flag carries
 the checklist text that triggered it, so nothing is asserted that the checklist does not say.
 A flag is a lead: confirm it on the plan image before it reaches a script.
@@ -141,7 +141,7 @@ def build_ctx(all_rows):
 
 
 def scan(slugs):
-    spec = yaml.safe_load(open(os.path.join(HERE, "issues.yaml")))
+    spec = yaml.safe_load(open(os.path.join(HERE, "traits.yaml")))
     projects = [(s, *load(s)) for s in slugs]
     # quartiles use every project with a checklist, so a small project is compared fairly
     every = []
@@ -152,7 +152,7 @@ def scan(slugs):
     for slug, project, rows in projects:
         for row in rows:
             flags = []
-            for iss in spec["issues"]:
+            for iss in spec["traits"]:
                 rule = iss["detect"]
                 ev = computed(rule, row, ctx) if "computed" in rule else match_rule(rule, row)
                 if ev and any(f["id"] in iss.get("unless", []) for f in flags):
@@ -185,28 +185,28 @@ def main(argv):
     if as_json:
         print(json.dumps(res, indent=1, ensure_ascii=False))
         return 0
-    issues = {i["id"]: i for i in spec["issues"]}
+    traits = {i["id"]: i for i in spec["traits"]}
     for r in res:
         print(f"\n## {r['project']} {r['type']} — {r['category']}, {r['sqft']} sqft"
               + (f", {r['units']} units" if r["units"] else ""))
         if not r["flags"]:
-            print("   no issues detected from the checklist")
+            print("   no traits detected from the checklist")
         for f in r["flags"]:
             print(f"   - {f['title']}  [{f['evidence']}]")
             if one:
-                iss = issues[f["id"]]
-                print(f"       costs: {iss['costs']}")
-                print(f"       matters less to: {'; '.join(iss['who_less'])}")
-                print(f"       matters more to: {'; '.join(iss['who_more'])}")
-                for w in iss["workarounds"]:
+                iss = traits[f["id"]]
+                print(f"       day to day: {iss['day_to_day']}")
+                print(f"       suits: {'; '.join(iss['suits'])}")
+                print(f"       plan ahead if: {'; '.join(iss['plan_ahead'])}")
+                for w in iss["make_it_work"]:
                     if isinstance(w, dict):
-                        print(f"       workaround (needs a renovation-rule check, do not say until sg-reno-rules confirms): {w['text']}")
-                        if w.get("reno_workaround"):
-                            print(f"         -> python3 <sg-reno-rules>/verify.py --workaround \"{w['reno_workaround']}\"")
+                        print(f"       make it work (renovation: say only once sg-reno-rules confirms): {w['text']}")
+                        if w.get("reno_idea"):
+                            print(f"         -> python3 <sg-reno-rules>/verify.py --idea \"{w['reno_idea']}\"")
                     else:
-                        print(f"       workaround: {w}")
-    print("\n## Summary — unit types flagged, per issue")
-    for iss in spec["issues"]:
+                        print(f"       make it work: {w}")
+    print("\n## How common each trait is — share of unit types scanned")
+    for iss in spec["traits"]:
         hits = [r for r in res if any(f["id"] == iss["id"] for f in r["flags"])]
         if hits:
             print(f"   {len(hits):3d} of {len(res)} ({100*len(hits)/len(res):.0f}%)  {iss['title']}")

@@ -67,16 +67,16 @@ def test_walltype_reads_solid_and_outline(tmp_path):
     assert outline.stdout.startswith("OUTLINE"), outline.stdout
 
 
-# ---- issues.py ------------------------------------------------------------
+# ---- traits.py ------------------------------------------------------------
 
-def _issues(*args):
-    r = run(os.path.join(SP, "issues.py"), "example-residences", "--data-dir", FIX, "--json", *args)
+def _traits(*args):
+    r = run(os.path.join(SP, "traits.py"), "example-residences", "--data-dir", FIX, "--json", *args)
     assert r.returncode == 0, r.stderr
     return {row["type"]: {f["id"] for f in row["flags"]} for row in json.loads(r.stdout)}
 
 
-def test_issues_flags_from_checklist_text():
-    got = _issues()
+def test_traits_flags_from_checklist_text():
+    got = _traits()
     assert {"kitchen_internal", "bathroom_no_window", "no_shelter_no_yard", "study_open_niche",
             "two_bedrooms_only"} <= got["2A"]
     assert "kitchen_window_to_ledge" in got["3B"] and "kitchen_internal" not in got["3B"]
@@ -84,16 +84,16 @@ def test_issues_flags_from_checklist_text():
     assert {"no_foyer", "shared_bathroom_two_bedrooms", "narrow_bedroom"} <= got["2C"]
 
 
-def test_issues_bed_check_tries_both_orientations():
+def test_traits_bed_check_tries_both_orientations():
     # a 2.6 x 3.7 master takes a queen with the headboard on the long wall
-    assert "tight_master_queen" not in _issues()["2A"]
+    assert "tight_master_queen" not in _traits()["2A"]
     # a 2.3 x 3.0 master does not
-    assert "tight_master_queen" in _issues()["2C"]
+    assert "tight_master_queen" in _traits()["2C"]
 
 
-def test_issues_reads_env_data_dir():
+def test_traits_reads_env_data_dir():
     env = dict(os.environ, SG_FLOORPLAN_DATA=FIX)
-    r = run(os.path.join(SP, "issues.py"), "example-residences", env=env)
+    r = run(os.path.join(SP, "traits.py"), "example-residences", env=env)
     assert r.returncode == 0 and "Example Residences" in r.stdout
 
 
@@ -110,10 +110,10 @@ def test_rules_pack_contract():
             assert r.get("quote") and r.get("say"), f"{r['id']}: a sayable rule needs a quote and a say line"
         if r["source"]["grade"] == "secondary":
             assert r["status"] in {"unverified", "check_mcst"}, f"{r['id']}: secondary source cannot assert"
-    for k, refs in pack["workarounds"].items():
+    for k, refs in pack["ideas"].items():
         assert set(refs) <= ids, k
 
 
 def test_verify_runs_and_prints_say_lines():
-    r = run(os.path.join(RR, "verify.py"), "--workaround", "glass in the balcony")
+    r = run(os.path.join(RR, "verify.py"), "--idea", "glass in the balcony")
     assert "SAY:" in r.stdout and "balcony_no_enclosure" in r.stdout

@@ -1,6 +1,6 @@
 # Floorplan checklist format
 
-`issues.py` reads one JSON file per project: `<data-dir>/<project-slug>/floorplan-checklist.draft.json`.
+`traits.py` reads one JSON file per project: `<data-dir>/<project-slug>/floorplan-checklist.draft.json`.
 
 ```json
 {
@@ -27,7 +27,7 @@
 }
 ```
 
-Every field is optional; an issue whose fields are missing simply does not fire. Text fields are
+Every field is optional; a trait whose fields are missing simply does not fire. Text fields are
 read as written, so write what the drawing shows ("none", "internal kitchen", "no window") rather
 than codes. `room_dims` is `name WxD` pairs separated by `;`, with `(0.7 m wardrobe)` after any room
 whose size includes a wardrobe run. `minuses` may be a string with ` | ` separators or a list.

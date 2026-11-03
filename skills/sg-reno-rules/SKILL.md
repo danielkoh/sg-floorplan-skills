@@ -1,6 +1,6 @@
 ---
 name: sg-reno-rules
-description: Use when a Singapore condo or EC floor-plan answer, script or layout touches what an owner may change — drilling or fixing into walls, household (bomb) shelters, swapping a gas hob for induction, glass partitions, balcony screens or enclosure, drying racks, air-con ledges, taking down a wall, MCST renovation approval — or when sg-space-planning tags a workaround needs_reno_check.
+description: Use when a Singapore condo or EC floor-plan answer, script or layout touches what an owner may change — drilling or fixing into walls, household (bomb) shelters, swapping a gas hob for induction, glass partitions, balcony screens or enclosure, drying racks, air-con ledges, taking down a wall, MCST renovation approval — or when sg-space-planning tags an idea needs_reno_check.
 ---
 
 # Singapore renovation rules (condo and EC)
@@ -20,10 +20,10 @@ Rules live in `rules.yaml`, each with status, verbatim quote, source URL, grade 
 ```bash
 python3 <this skill>/verify.py                     # pack status; exit 1 if stale
 python3 <this skill>/verify.py hs_drill_internal   # one rule, ready to quote
-python3 <this skill>/verify.py --workaround "swap a gas hob for induction"
+python3 <this skill>/verify.py --idea "swap a gas hob for induction"
 ```
 
-1. Find the rule (by id, or by workaround from `sg-space-planning`).
+1. Find the rule (by id, or by idea from `sg-space-planning`).
 2. Check it is **sayable**: status not `unverified`, a `say` line exists, source fetched within
    90 days. `verify.py` prints `SAY:` only when all three hold.
 3. Match the housing type: a rule's `applies_to` must include the unit's type (condo, ec, landed).

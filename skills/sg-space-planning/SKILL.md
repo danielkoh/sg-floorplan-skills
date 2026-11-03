@@ -1,6 +1,6 @@
 ---
 name: sg-space-planning
-description: Use when furnishing or space-planning a Singapore condo, HDB or landed unit from its floor plan — finding space inefficiencies, deciding what a room can hold, laying a room out for a particular household (WFH couple, young family, grandparents staying, a first home for one), or preparing furniture layouts and coordinates for a Blender scene or a floor-plan video.
+description: Use when furnishing or space-planning a Singapore condo, EC or landed unit from its floor plan — seeing which households a layout suits, deciding what a room can hold, making an awkward room work, laying a room out for a particular household (WFH couple, young family, grandparents staying, a first home for one), or preparing furniture layouts and coordinates for a Blender scene or a floor-plan video.
 ---
 
 # Singapore space planning
@@ -27,19 +27,20 @@ alone. If neither the checklist nor a scale bar gives a dimension, mark it `infe
 **When the checklist and the image disagree, lay out on the smaller figure and say so.**
 **Wardrobe doors are hinged (0.90 m in front) unless the drawing shows sliding doors.**
 
-## Issue scan — run it first
+## Layout scan — run it first
 
-`python3 <this skill>/issues.py <slug> [--type "<type>"]` (or `--all`); point it at your checklists with `--data-dir <dir>` or `SG_FLOORPLAN_DATA`
-flags the layout issues that put buyers off, from `issues.yaml`: windowless or open kitchens,
-no foyer, heavy circulation, windowless bathrooms, no shelter or yard, open study niches,
-borrowed-light masters, shared bathrooms, narrow bedrooms, two bedrooms only. Each flag quotes
-the checklist text behind it. `--type` adds what each issue costs a household, who it matters
-less and more to, and the workarounds. The summary gives each issue's share of every type
-scanned: **an issue on most units is not a reason to choose this one over another; frame it as
-"how to live with it", not as a difference.**
+`python3 <this skill>/traits.py <slug> [--type "<type>"]` (or `--all`); point it at your
+checklists with `--data-dir <dir>` or `SG_FLOORPLAN_DATA`. It reads each unit type's layout
+traits from `traits.yaml` — internal or open kitchens, entry without a foyer, corridor-set
+bedrooms, fan-ventilated bathrooms, storage planned into the rooms, study nooks, compact
+bedrooms, two-bedroom plans — and quotes the checklist text behind each. `--type` adds what each
+trait gives a household day to day, who it suits, who should plan ahead for it, and how to make
+it work. The summary gives each trait's share of every type scanned: **a trait most units share
+is how new launches are built, so present it as "how to make it work", not as a difference
+between units.**
 
-Every flag is a lead. Confirm it on the plan image before it reaches a script; a space issue
-(narrow room, niche, no foyer) then gets a layout through `fit.py`.
+Every trait is a lead. Confirm it on the plan image before it reaches a script; a space trait
+(compact room, nook, entry without a foyer) then gets a layout through `fit.py`.
 
 ## Workflow
 
@@ -48,13 +49,13 @@ Every flag is a lead. Confirm it on the plan image before it reaches a script; a
    `inferred`. For any wall you might suggest removing, read its type:
    `python3 <this skill>/walltype.py plan.png x1 y1 x2 y2` (a short segment
    across the wall). Solid shaded fill = structural, never removable; outline = partition, which
-   opens the "take down a partition" workaround via `sg-reno-rules`.
-2. **Find the inefficiencies (internal).** Start from the issue scan, then add what only the
-   drawing shows. Measured facts only: rooms under ~2.5 m clear, niches
-   and leftover strips, long passages, windowless spaces, missing shelter/yard storage,
-   appliances eating worktop. Say what each costs a household, in metres.
-3. **Pick the household.** Use `who_less` in `issues.yaml`: the household the unit's issues
-   matter least to, or the one a workaround serves. One per layout. The question is "what does this room let *this*
+   opens the "take down a partition" idea via `sg-reno-rules`.
+2. **Read the layout's traits.** Start from the layout scan, then add what only the drawing
+   shows. Measured facts only: rooms under ~2.5 m clear, nooks and strips, long passages,
+   fan-ventilated spaces, storage to plan, appliances sharing worktop. Say what each means for a
+   household, in metres.
+3. **Pick the household.** Use `suits` in `traits.yaml`: a household the layout suits, or one
+   that `make_it_work` serves. One per layout. The question is "what does this room let *this*
    household do", not "who should buy this unit".
 4. **Write the layout JSON** (format below) and run:
    `python3 <this skill>/fit.py layout.json`
@@ -79,7 +80,7 @@ Examples: `examples/example-3br-bed3-study-for-two.json` (PASS, read off a real 
 ## Output contract
 
 1. **Room model table**: dimension, value, mark.
-2. **Findings**: each inefficiency with its measurement (internal wording allowed).
+2. **Traits**: each trait with its measurement and what it means day to day.
 3. **Layout**: household, the layout JSON path, and the `fit.py` PASS report pasted in full,
    with every `SHARED` line restated in plain words. Keep any failed layout file as evidence of
    a finding ("a queen does not fit with hinged doors"), named `*-FAIL.json`, never for the scene.
@@ -92,15 +93,16 @@ Examples: `examples/example-3br-bed3-study-for-two.json` (PASS, read off a real 
 
 - **Loose furniture by default.** Anything drilled, hung or fixed (walls, ceilings, balconies,
   the household shelter), or any change to plumbing, appliances or walls, goes through
-  `sg-reno-rules` first: `python3 <sg-reno-rules>/verify.py --workaround "<idea>"`.
+  `sg-reno-rules` first: `python3 <sg-reno-rules>/verify.py --idea "<idea>"`.
   Say it only if that prints a `SAY:` line for the unit's housing type, and say it with its
   conditions. Otherwise list it under Open items.
 - **Nothing from `standards.yaml → unavailable`** (bunk headroom, wall-bed specs, sofa/TV
   distances) unless a named product's spec sheet is cited.
-- **Public wording leads with the household, not the unit.** Copy says what the room holds and
-  how one household uses it. It never opens on what the unit lacks, never says "inefficient",
-  "wasted" or "bad", and never questions the developer's plan. "Inefficiency" is a working word.
-- **Workarounds tagged `needs_reno_check` are never said** until a renovation rule confirms them.
+- **Positive, household-first wording, everywhere.** Copy says what the room holds and how one
+  household makes it work. It never opens on what the unit lacks, never uses "problem", "issue",
+  "inefficient", "wasted", "bad" or "buyers would mind", and never questions the developer's plan.
+- **`make_it_work` items tagged `needs_reno_check` are never said** until a renovation rule
+  confirms them.
 - **No verdicts on households.** "One way it works for a family of four", never "perfect for families".
 - Hooks are not this skill's job. Research what is actually running in the category before writing one.
 

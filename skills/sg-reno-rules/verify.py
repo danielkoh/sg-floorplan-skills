@@ -4,7 +4,7 @@
 Usage:
     python3 verify.py                 # every rule: status, grade, age; exit 1 if a sayable rule is stale
     python3 verify.py <rule_id>       # one rule in full, ready to quote
-    python3 verify.py --workaround "swap a gas hob for induction"   # the rules governing a workaround
+    python3 verify.py --idea "swap a gas hob for induction"   # the rules governing an idea (--workaround also works)
 
 A rule is sayable when its status is not `unverified`, it has a `say` line, and its source was
 fetched within MAX_AGE_DAYS. Anything else must not reach a script or a client.
@@ -64,12 +64,13 @@ def main(argv):
     pack = load()
     today = dt.date.today()
     rules = {r["id"]: r for r in pack["rules"]}
-    if "--workaround" in argv:
-        key = argv[argv.index("--workaround") + 1]
-        ids = pack["workarounds"].get(key)
+    flag = "--idea" if "--idea" in argv else ("--workaround" if "--workaround" in argv else None)
+    if flag:
+        key = argv[argv.index(flag) + 1]
+        ids = pack["ideas"].get(key)
         if not ids:
-            print(f"No rules mapped for '{key}'. Known workarounds:")
-            for k in pack["workarounds"]:
+            print(f"No rules mapped for '{key}'. Known ideas:")
+            for k in pack["ideas"]:
                 print(f"  - {k}")
             return 2
         for i in ids:

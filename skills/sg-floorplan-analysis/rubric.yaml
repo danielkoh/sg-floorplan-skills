@@ -185,7 +185,7 @@ layout:
       because both bedrooms open onto the shared living space. Record the
       trade-off, do not score it as a straight win.
 
-  - id: corridor_waste
+  - id: corridor_share
     ask: Approximate area given to pure circulation.
     note: Corridors also tend to be unlit and unventilated. Say which.
 
