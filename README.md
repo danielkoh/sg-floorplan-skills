@@ -75,6 +75,7 @@ Built and used daily by **[bluebed property](https://property.bluebed.ai)** — 
 new-launch catalogue, readable by your AI. Floor plans, measured MRT and school distances, and the
 rules behind every figure. The engineering behind it is by **[bluebed](https://bluebed.ai)**.
 
+- Related: [property-bluebed-mcp](https://github.com/danielkoh/property-bluebed-mcp), the MCP server that lets your assistant search the same reviewed floor plans; connect it at [property.bluebed.ai/connect](https://property.bluebed.ai/connect).
 - Source: [github.com/danielkoh/sg-floorplan-skills](https://github.com/danielkoh/sg-floorplan-skills)
 - Licence: MIT. The evidence rules in `sg-space-planning` adapt the method of pascalorg/editor's
   `furniture-fit` skill (MIT).
